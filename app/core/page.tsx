@@ -1,10 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
 
 export default function CorePage() {
 const [input, setInput] = useState("");
 const [output, setOutput] = useState<any>(null);
+const [savedOutputs, setSavedOutputs] = useState<any[]>([]);
+
+const loadSavedOutputs = async () => {
+const { data, error } = await supabase
+.from("core_outputs")
+.select("*")
+.order("id", { ascending: false });
+
+if (error) {
+console.error(error);
+return;
+}
+
+setSavedOutputs(data || []);
+};
+
+useEffect(() => {
+loadSavedOutputs();
+}, []);
 
 const generateCore = () => {
 const text = input.toLowerCase();
@@ -53,7 +73,8 @@ text.includes("english") || text.includes("excel")
 .join(", ") || "Not specified"
 : "Not specified",
 
-stage: text.includes("already applied") || text.includes("applied online")
+stage:
+text.includes("already applied") || text.includes("applied online")
 ? "Applied"
 : "Not specified",
 
@@ -62,14 +83,38 @@ text.includes("already applied") || text.includes("applied online")
 ? "Follow up on application"
 : "Review application requirements",
 
-priority: text.includes("deadline")
-? "High"
-: "Medium",
+priority: text.includes("deadline") ? "High" : "Medium",
 };
 
 setOutput(result);
 };
 
+const saveOutput = async () => {
+if (!output) return;
+
+const { error } = await supabase.from("core_outputs").insert([
+{
+input_text: input,
+company: output.company,
+role: output.role,
+location: output.location,
+deadline: output.deadline,
+skills: output.skills,
+stage: output.stage,
+next_step: output.nextStep,
+priority: output.priority,
+},
+]);
+
+if (error) {
+alert(error.message);
+console.error(error);
+return;
+}
+
+alert("Output saved successfully");
+loadSavedOutputs();
+};
 
 return (
 <main className="min-h-screen bg-white px-6 py-10">
@@ -113,21 +158,84 @@ Core Extraction
 </h2>
 
 <div className="mt-6 grid gap-4 md:grid-cols-2">
-<p><strong>Company:</strong> {output.company}</p>
-<p><strong>Role:</strong> {output.role}</p>
-<p><strong>Location:</strong> {output.location}</p>
-<p><strong>Deadline:</strong> {output.deadline}</p>
-<p><strong>Key Skills:</strong> {output.skills}</p>
-<p><strong>Suggested Stage:</strong> {output.stage}</p>
-<p><strong>Next Step:</strong> {output.nextStep}</p>
-<p><strong>Priority:</strong> {output.priority}</p>
+<p>
+<strong>Company:</strong> {output.company}
+</p>
+<p>
+<strong>Role:</strong> {output.role}
+</p>
+<p>
+<strong>Location:</strong> {output.location}
+</p>
+<p>
+<strong>Deadline:</strong> {output.deadline}
+</p>
+<p>
+<strong>Key Skills:</strong> {output.skills}
+</p>
+<p>
+<strong>Suggested Stage:</strong> {output.stage}
+</p>
+<p>
+<strong>Next Step:</strong> {output.nextStep}
+</p>
+<p>
+<strong>Priority:</strong> {output.priority}
+</p>
 </div>
 
-<button className="mt-6 rounded-xl bg-gray-900 px-6 py-3 font-semibold text-white">
+<button
+onClick={saveOutput}
+className="mt-6 rounded-xl bg-gray-900 px-6 py-3 font-semibold text-white"
+>
 Save Output
 </button>
 </div>
 )}
+
+<div className="mt-12">
+<h2 className="text-2xl font-bold text-gray-900">
+Dashboard Preview
+</h2>
+
+<p className="mt-2 text-gray-600">
+Recently saved internship outputs.
+</p>
+
+<div className="mt-6 space-y-4">
+{savedOutputs.length === 0 ? (
+<p className="text-gray-500">No saved outputs yet.</p>
+) : (
+savedOutputs.map((item) => (
+<div
+key={item.id}
+className="rounded-2xl border border-gray-200 p-5"
+>
+<div className="grid gap-3 md:grid-cols-2">
+<p>
+<strong>Company:</strong> {item.company}
+</p>
+<p>
+<strong>Role:</strong> {item.role}
+</p>
+<p>
+<strong>Location:</strong> {item.location}
+</p>
+<p>
+<strong>Deadline:</strong> {item.deadline}
+</p>
+<p>
+<strong>Stage:</strong> {item.stage}
+</p>
+<p>
+<strong>Priority:</strong> {item.priority}
+</p>
+</div>
+</div>
+))
+)}
+</div>
+</div>
 </div>
 </main>
 );
