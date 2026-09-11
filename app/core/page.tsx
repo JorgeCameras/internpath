@@ -29,27 +29,21 @@ loadSavedOutputs();
 const generateCore = () => {
 const text = input.toLowerCase();
 
+const deadlineMatch = text.match(
+/\b(january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2}\b/
+);
+
 const result = {
-company: text.includes("amazon")
-? "Amazon"
-: text.includes("google")
-? "Google"
-: text.includes("microsoft")
+company: text.includes("microsoft")
 ? "Microsoft"
-: text.includes("nike")
-? "Nike"
-: text.includes("adidas")
-? "Adidas"
+: text.includes("amazon")
+? "Amazon"
 : "Not specified",
 
-role: text.includes("retail intern")
-? "Retail Intern"
-: text.includes("marketing intern")
-? "Marketing Intern"
-: text.includes("software engineering intern")
-? "Software Engineering Intern"
-: text.includes("product management intern")
+role: text.includes("product management intern")
 ? "Product Management Intern"
+: text.includes("retail intern")
+? "Retail Intern"
 : "Not specified",
 
 location: text.includes("mexico city")
@@ -60,18 +54,22 @@ location: text.includes("mexico city")
 ? "Hybrid"
 : "Not specified",
 
-deadline: text.includes("october 20")
-? "October 20"
-: text.includes("october 15")
-? "October 15"
+deadline: deadlineMatch
+? deadlineMatch[0]
+.split(" ")
+.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+.join(" ")
 : "Not specified",
 
 skills:
-text.includes("english") || text.includes("excel")
-? ["English", "Excel", "Communication", "Analytical Thinking"]
-.filter((skill) => text.includes(skill.toLowerCase()))
-.join(", ") || "Not specified"
-: "Not specified",
+[
+text.includes("english") ? "English" : "",
+text.includes("excel") ? "Excel" : "",
+text.includes("communication") ? "Communication" : "",
+text.includes("analytical thinking") ? "Analytical Thinking" : "",
+]
+.filter(Boolean)
+.join(", ") || "Not specified",
 
 stage:
 text.includes("already applied") || text.includes("applied online")
@@ -88,7 +86,6 @@ priority: text.includes("deadline") ? "High" : "Medium",
 
 setOutput(result);
 };
-
 const saveOutput = async () => {
 if (!output) return;
 
