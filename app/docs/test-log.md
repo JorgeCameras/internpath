@@ -51,3 +51,18 @@ PASS
 During testing, saving initially failed because Supabase Row Level Security blocked new inserts. I identified the exact error message and added policies that allow anonymous and authenticated users to insert and read rows from core_outputs.
 
 After this correction, Save Output worked successfully and the saved internship appeared in both Supabase and Dashboard Preview.
+
+
+## Test 4 - Deadline Extraction
+
+Input:
+Microsoft Product Management Intern in Mexico City. Deadline November 15. Requires English, Excel, communication and analytical skills. I have not applied yet.
+
+Expected Result:
+The Core Agent should extract Microsoft, Product Management Intern, Mexico City, November 15, and the listed skills.
+
+Actual Result:
+The Core Agent correctly extracted November 15 and the internship information. The result was successfully saved to Supabase and displayed in Dashboard Preview.
+
+Status:
+PASS
