@@ -1,9 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "../core/lib/supabase";
+
+type SavedResearch = {
+id: number;
+topic: string;
+market: string;
+created_at: string;
+};
 
 export default function ResearchPage() {
 const [search, setSearch] = useState("");
+const [topic, setTopic] = useState("");
+const [generatedTopic, setGeneratedTopic] = useState("");
+const [savedResearch, setSavedResearch] = useState<SavedResearch[]>([]);
+const [message, setMessage] = useState("");
 
 const benchmarks = [
 {
@@ -92,6 +104,58 @@ gap: "Research is fragmented across sites",
 },
 ];
 
+const loadSavedResearch = async () => {
+const { data, error } = await supabase
+.from("research_outputs")
+.select("*")
+.order("created_at", { ascending: false });
+
+if (error) {
+console.error(error);
+return;
+}
+
+setSavedResearch(data || []);
+};
+
+useEffect(() => {
+loadSavedResearch();
+}, []);
+
+const generateResearch = () => {
+const cleanTopic = topic.trim();
+
+if (!cleanTopic) {
+setMessage("Please enter a research topic first.");
+setGeneratedTopic("");
+return;
+}
+
+setGeneratedTopic(cleanTopic);
+setMessage("Research generated successfully.");
+};
+
+const saveResearch = async () => {
+if (!generatedTopic) {
+setMessage("Generate a research topic before saving.");
+return;
+}
+
+const { error } = await supabase.from("research_outputs").insert({
+topic: generatedTopic,
+market: "Mexico",
+});
+
+if (error) {
+console.error(error);
+setMessage(`Save failed: ${error.message}`);
+return;
+}
+
+setMessage("Research saved successfully.");
+await loadSavedResearch();
+};
+
 const filteredCompetitors = useMemo(() => {
 const term = search.toLowerCase().trim();
 
@@ -134,13 +198,48 @@ Research Topic
 
 <input
 type="text"
+value={topic}
+onChange={(event) => setTopic(event.target.value)}
 placeholder="Example: Product Manager internships in Mexico"
 className="w-full rounded-lg border px-4 py-3"
 />
 
-<button className="mt-4 rounded-lg bg-blue-600 px-5 py-3 font-medium text-white">
+<div className="mt-4 flex flex-wrap gap-3">
+<button
+onClick={generateResearch}
+className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white"
+>
 Generate Research
 </button>
+
+{generatedTopic && (
+<button
+onClick={saveResearch}
+className="rounded-lg bg-gray-900 px-5 py-3 font-medium text-white"
+>
+Save Research
+</button>
+)}
+</div>
+
+{message && (
+<p className="mt-3 text-sm text-gray-600">
+{message}
+</p>
+)}
+
+{generatedTopic && (
+<div className="mt-5 rounded-xl border bg-gray-50 p-4">
+<p className="text-xs font-medium uppercase text-gray-500">
+Simulated Research Output
+</p>
+<p className="mt-1 font-semibold">{generatedTopic}</p>
+<p className="mt-1 text-sm text-gray-600">
+Showing benchmark, competitor, Mexico market, and risk analysis
+for this research topic.
+</p>
+</div>
+)}
 </div>
 
 <section className="mt-10">
@@ -263,7 +362,7 @@ local job boards, and company career pages during their search.
 </div>
 </section>
 
-<section className="mt-12 pb-10">
+<section className="mt-12">
 <p className="text-sm font-medium text-blue-600">
 Risk Analysis
 </p>
@@ -317,6 +416,41 @@ if results are not saved in one place.
 </p>
 </div>
 </div>
+</section>
+
+<section className="mt-12 pb-12">
+<p className="text-sm font-medium text-blue-600">
+Dashboard Widget
+</p>
+
+<h2 className="mt-1 text-2xl font-bold">
+Saved Research
+</h2>
+
+{savedResearch.length === 0 ? (
+<div className="mt-5 rounded-2xl border p-5">
+<p className="text-sm text-gray-600">
+No research saved yet.
+</p>
+</div>
+) : (
+<div className="mt-5 space-y-3">
+{savedResearch.map((item) => (
+<div
+key={item.id}
+className="rounded-2xl border p-5"
+>
+<p className="font-semibold">{item.topic}</p>
+<p className="mt-1 text-sm text-gray-600">
+Market: {item.market}
+</p>
+<p className="mt-1 text-xs text-gray-500">
+Saved: {new Date(item.created_at).toLocaleString()}
+</p>
+</div>
+))}
+</div>
+)}
 </section>
 </div>
 </main>
