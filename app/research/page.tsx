@@ -1,4 +1,10 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
 export default function ResearchPage() {
+const [search, setSearch] = useState("");
+
 const benchmarks = [
 {
 company: "Google",
@@ -26,6 +32,84 @@ focus: "Technical and business internships",
 takeaway: "Highly structured recruiting and role specialization",
 },
 ];
+
+const competitors = [
+{
+name: "LinkedIn",
+type: "Job Platform",
+market: "Global",
+strength: "Large professional network",
+gap: "Application tracking is limited",
+},
+{
+name: "Indeed",
+type: "Job Platform",
+market: "Global",
+strength: "Large job database",
+gap: "Limited internship research tools",
+},
+{
+name: "Glassdoor",
+type: "Research Platform",
+market: "Global",
+strength: "Company reviews and salary data",
+gap: "Weak application organization",
+},
+{
+name: "Handshake",
+type: "Student Career Platform",
+market: "Global",
+strength: "University-focused recruiting",
+gap: "Availability depends on institution",
+},
+{
+name: "Simplify",
+type: "Application Tool",
+market: "Global",
+strength: "Fast application workflows",
+gap: "Limited benchmarking features",
+},
+{
+name: "OCCMundial",
+type: "Job Platform",
+market: "Mexico",
+strength: "Strong local job listings",
+gap: "Limited internship comparison tools",
+},
+{
+name: "Computrabajo",
+type: "Job Platform",
+market: "Mexico",
+strength: "Large Mexican and LATAM presence",
+gap: "Limited application tracking",
+},
+{
+name: "Company Career Pages",
+type: "Substitute",
+market: "Global",
+strength: "Direct access to official roles",
+gap: "Research is fragmented across sites",
+},
+];
+
+const filteredCompetitors = useMemo(() => {
+const term = search.toLowerCase().trim();
+
+if (!term) return competitors;
+
+return competitors.filter((competitor) =>
+[
+competitor.name,
+competitor.type,
+competitor.market,
+competitor.strength,
+competitor.gap,
+]
+.join(" ")
+.toLowerCase()
+.includes(term)
+);
+}, [search]);
 
 return (
 <main className="min-h-screen px-6 py-10">
@@ -60,14 +144,13 @@ Generate Research
 </div>
 
 <section className="mt-10">
-<div>
 <p className="text-sm font-medium text-blue-600">
 Global Examples
 </p>
+
 <h2 className="mt-1 text-2xl font-bold">
 Benchmark Companies
 </h2>
-</div>
 
 <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 {benchmarks.map((benchmark) => (
@@ -89,6 +172,59 @@ className="rounded-2xl border p-5"
 </div>
 ))}
 </div>
+</section>
+
+<section className="mt-12">
+<p className="text-sm font-medium text-blue-600">
+Market Comparison
+</p>
+
+<h2 className="mt-1 text-2xl font-bold">
+Competitors & Substitutes
+</h2>
+
+<input
+type="text"
+value={search}
+onChange={(event) => setSearch(event.target.value)}
+placeholder="Search company, type, or market..."
+className="mt-5 w-full rounded-lg border px-4 py-3"
+/>
+
+<div className="mt-5 overflow-x-auto rounded-2xl border">
+<table className="w-full text-left text-sm">
+<thead className="border-b bg-gray-50">
+<tr>
+<th className="px-4 py-3">Company</th>
+<th className="px-4 py-3">Type</th>
+<th className="px-4 py-3">Market</th>
+<th className="px-4 py-3">Strength</th>
+<th className="px-4 py-3">Gap</th>
+</tr>
+</thead>
+
+<tbody>
+{filteredCompetitors.map((competitor) => (
+<tr
+key={competitor.name}
+className="border-b last:border-b-0"
+>
+<td className="px-4 py-3 font-medium">
+{competitor.name}
+</td>
+<td className="px-4 py-3">{competitor.type}</td>
+<td className="px-4 py-3">{competitor.market}</td>
+<td className="px-4 py-3">{competitor.strength}</td>
+<td className="px-4 py-3">{competitor.gap}</td>
+</tr>
+))}
+</tbody>
+</table>
+</div>
+
+<p className="mt-3 text-sm text-gray-500">
+Showing {filteredCompetitors.length} of {competitors.length} results.
+</p>
 </section>
 </div>
 </main>
