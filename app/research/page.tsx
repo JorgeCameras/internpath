@@ -226,6 +226,98 @@ className="border-b last:border-b-0"
 Showing {filteredCompetitors.length} of {competitors.length} results.
 </p>
 </section>
+
+<section className="mt-12">
+<p className="text-sm font-medium text-blue-600">
+Mexico Localization
+</p>
+
+<h2 className="mt-1 text-2xl font-bold">
+Mexico Internship Market Context
+</h2>
+
+<div className="mt-5 grid gap-4 md:grid-cols-3">
+<div className="rounded-2xl border p-5">
+<h3 className="font-semibold">Local Platforms</h3>
+<p className="mt-2 text-sm text-gray-600">
+OCCMundial and Computrabajo are important local sources for
+internship and entry-level opportunities in Mexico.
+</p>
+</div>
+
+<div className="rounded-2xl border p-5">
+<h3 className="font-semibold">Language</h3>
+<p className="mt-2 text-sm text-gray-600">
+Many multinational internships in Mexico value English
+proficiency in addition to Spanish communication skills.
+</p>
+</div>
+
+<div className="rounded-2xl border p-5">
+<h3 className="font-semibold">Hiring Context</h3>
+<p className="mt-2 text-sm text-gray-600">
+Students often combine university career portals, LinkedIn,
+local job boards, and company career pages during their search.
+</p>
+</div>
+</div>
+</section>
+
+<section className="mt-12 pb-10">
+<p className="text-sm font-medium text-blue-600">
+Risk Analysis
+</p>
+
+<h2 className="mt-1 text-2xl font-bold">
+Simple Risk Map
+</h2>
+
+<div className="mt-5 grid gap-4 md:grid-cols-2">
+<div className="rounded-2xl border p-5">
+<p className="text-sm font-medium">High Risk</p>
+<h3 className="mt-1 font-semibold">
+Fragmented internship information
+</h3>
+<p className="mt-2 text-sm text-gray-600">
+Students may miss opportunities because information is spread
+across many different platforms.
+</p>
+</div>
+
+<div className="rounded-2xl border p-5">
+<p className="text-sm font-medium">Medium Risk</p>
+<h3 className="mt-1 font-semibold">
+Inconsistent application tracking
+</h3>
+<p className="mt-2 text-sm text-gray-600">
+Different platforms use different status systems, making it
+difficult to maintain one clear application pipeline.
+</p>
+</div>
+
+<div className="rounded-2xl border p-5">
+<p className="text-sm font-medium">Medium Risk</p>
+<h3 className="mt-1 font-semibold">
+Limited local benchmarking
+</h3>
+<p className="mt-2 text-sm text-gray-600">
+Global platforms may not always reflect the recruiting process
+and internship landscape in Mexico.
+</p>
+</div>
+
+<div className="rounded-2xl border p-5">
+<p className="text-sm font-medium">Low Risk</p>
+<h3 className="mt-1 font-semibold">
+Duplicate research
+</h3>
+<p className="mt-2 text-sm text-gray-600">
+Students may repeat the same research across multiple websites
+if results are not saved in one place.
+</p>
+</div>
+</div>
+</section>
 </div>
 </main>
 );
