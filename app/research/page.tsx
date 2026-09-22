@@ -137,7 +137,7 @@ setMessage("Research generated successfully.");
 
 const saveResearch = async () => {
 if (!generatedTopic) {
-setMessage("Generate a research topic before saving.");
+setMessage("Please generate a research topic before saving.");
 return;
 }
 
@@ -174,6 +174,9 @@ competitor.gap,
 .includes(term)
 );
 }, [search]);
+
+const isErrorMessage =
+message.startsWith("Please") || message.startsWith("Save failed");
 
 return (
 <main className="min-h-screen px-6 py-10">
@@ -223,9 +226,15 @@ Save Research
 </div>
 
 {message && (
-<p className="mt-3 text-sm text-gray-600">
+<div
+className={`mt-3 rounded-lg border px-4 py-3 text-sm ${
+isErrorMessage
+? "border-red-200 bg-red-50 text-red-700"
+: "border-green-200 bg-green-50 text-green-700"
+}`}
+>
 {message}
-</p>
+</div>
 )}
 
 {generatedTopic && (
@@ -233,7 +242,11 @@ Save Research
 <p className="text-xs font-medium uppercase text-gray-500">
 Simulated Research Output
 </p>
-<p className="mt-1 font-semibold">{generatedTopic}</p>
+
+<p className="mt-1 font-semibold">
+{generatedTopic}
+</p>
+
 <p className="mt-1 text-sm text-gray-600">
 Showing benchmark, competitor, Mexico market, and risk analysis
 for this research topic.
@@ -441,9 +454,11 @@ key={item.id}
 className="rounded-2xl border p-5"
 >
 <p className="font-semibold">{item.topic}</p>
+
 <p className="mt-1 text-sm text-gray-600">
 Market: {item.market}
 </p>
+
 <p className="mt-1 text-xs text-gray-500">
 Saved: {new Date(item.created_at).toLocaleString()}
 </p>
