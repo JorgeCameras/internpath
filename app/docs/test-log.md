@@ -141,3 +141,105 @@ The page remained stable and displayed the validation message inside a clearly v
 
 Status:
 PASS
+
+## Module 3 — Product Architecture + Pricing Simulator
+
+### Pricing Logic Test 1 — Monthly Revenue
+
+Input:
+- Potential customers: 10,000
+- Conversion rate: 10%
+- Monthly price: $99 MXN
+
+Expected Result:
+- Paid customers = 1,000
+- Monthly revenue = $99,000 MXN
+
+Actual Result:
+The simulator calculated 1,000 paid customers and $99,000 MXN in monthly revenue.
+
+Status:
+PASS
+
+
+### Pricing Logic Test 2 — Annual Revenue
+
+Input:
+- Monthly revenue: $99,000 MXN
+
+Expected Result:
+- Annual revenue = $1,188,000 MXN
+
+Actual Result:
+The simulator calculated $1,188,000 MXN in annual revenue.
+
+Status:
+PASS
+
+
+### Software Test 1 — Scenario Toggle
+
+Action:
+Switch between Conservative, Base, and Aggressive scenarios.
+
+Expected Result:
+The calculator inputs and revenue assumptions should update according to the selected scenario.
+
+Actual Result:
+The scenario buttons updated the active scenario and changed the customer, conversion, and pricing assumptions successfully.
+
+Status:
+PASS
+
+
+### Software Test 2 — Save Pricing Scenario
+
+Action:
+Click "Save Current Scenario".
+
+Expected Result:
+The active pricing scenario should be saved in Supabase and displayed in the Saved Pricing Scenarios section.
+
+Actual Result:
+The first save attempt failed because the new Supabase table had Row Level Security enabled without public SELECT and INSERT policies.
+
+Initial Status:
+FAIL
+
+
+### Iteration — Supabase RLS Save Failure
+
+Issue:
+The Save Current Scenario button displayed the message "Save failed. Please try again." The pricing scenario was not being stored in Supabase.
+
+Cause:
+The pricing_scenarios table had Row Level Security enabled, but no policies allowed the public application to read or insert records.
+
+Fix:
+Two Supabase Row Level Security policies were created:
+- Public SELECT access using a true condition.
+- Public INSERT access using a true WITH CHECK condition.
+
+Retest:
+The Base pricing scenario was saved again using the Save Current Scenario button.
+
+Result:
+The application displayed "Pricing scenario saved successfully." The new Base Scenario appeared immediately in the Saved Pricing Scenarios table with the correct customer segment, scenario, customers, conversion rate, monthly price, monthly revenue, and annual revenue.
+
+Final Status:
+PASS
+
+
+### Software Test 3 — Invalid Input
+
+Action:
+Enter an invalid value such as 0 or a negative number in the pricing calculator and attempt to calculate or save.
+
+Expected Result:
+The application should not crash and should display clear validation feedback.
+
+Actual Result:
+The Potential Customers value was set to 0 and Calculate Revenue was clicked. The application remained stable and displayed the validation message "Please enter valid positive values before calculating revenue."
+
+Status:
+PASS
