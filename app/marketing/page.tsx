@@ -1,6 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../core/lib/supabase";
+
+type SavedAsset = {
+id: number;
+title: string;
+type: string;
+created_at: string;
+};
 
 const socialPosts = [
 {
@@ -124,21 +132,61 @@ hypothesis:
 ];
 
 export default function MarketingPage() {
-const [savedAssets, setSavedAssets] = useState<string[]>([]);
+const [savedAssets, setSavedAssets] = useState<SavedAsset[]>([]);
 const [message, setMessage] = useState("");
+const [loading, setLoading] = useState(false);
 
-const saveAsset = (asset: string) => {
-if (!asset.trim()) {
+const loadSavedAssets = async () => {
+const { data, error } = await supabase
+.from("marketing_assets")
+.select("*")
+.order("created_at", { ascending: false });
+
+if (error) {
+console.error(error);
+setMessage("Could not load saved marketing assets.");
+return;
+}
+
+setSavedAssets(data || []);
+};
+
+useEffect(() => {
+loadSavedAssets();
+}, []);
+
+const saveAsset = async (title: string, type: string) => {
+if (!title.trim()) {
 setMessage("Please select a valid marketing asset.");
 return;
 }
 
-if (!savedAssets.includes(asset)) {
-setSavedAssets([...savedAssets, asset]);
+setLoading(true);
+setMessage("");
+
+const { error } = await supabase.from("marketing_assets").insert({
+id: Date.now(),
+title,
+type,
+created_at: new Date().toISOString(),
+});
+
+if (error) {
+console.error(error);
+setMessage("Save failed. Please try again.");
+setLoading(false);
+return;
 }
 
 setMessage("Marketing asset saved successfully.");
+await loadSavedAssets();
+setLoading(false);
 };
+
+const isError =
+message.startsWith("Please") ||
+message.startsWith("Save failed") ||
+message.startsWith("Could not");
 
 return (
 <main className="min-h-screen bg-slate-50 px-6 py-12 text-slate-900">
@@ -234,8 +282,9 @@ Ready-to-use social media content for InternPath.
 <p className="mt-2 text-sm text-slate-600">{post.caption}</p>
 
 <button
-onClick={() => saveAsset(post.title)}
-className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+onClick={() => saveAsset(post.title, "Social Post")}
+disabled={loading}
+className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
 >
 Save Asset
 </button>
@@ -265,8 +314,9 @@ Save Asset
 </p>
 
 <button
-onClick={() => saveAsset(script.title)}
-className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+onClick={() => saveAsset(script.title, "Video Script")}
+disabled={loading}
+className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
 >
 Save Asset
 </button>
@@ -316,7 +366,9 @@ Compare alternative marketing messages before using them.
 <h3 className="text-lg font-bold">{test.name}</h3>
 
 <div className="mt-4 rounded-lg bg-slate-50 p-4">
-<p className="text-xs font-semibold text-blue-600">VERSION A</p>
+<p className="text-xs font-semibold text-blue-600">
+VERSION A
+</p>
 <p className="mt-1">{test.versionA}</p>
 </div>
 
@@ -340,12 +392,12 @@ VERSION B
 <div>
 <h2 className="text-2xl font-bold">Saved Marketing Assets</h2>
 <p className="mt-1 text-slate-600">
-Marketing content selected for future use.
+Saved permanently using Supabase.
 </p>
 </div>
 
 <button
-onClick={() => saveAsset("")}
+onClick={() => saveAsset("", "")}
 className="rounded-lg border px-4 py-2 text-sm font-semibold"
 >
 Test Empty Asset
@@ -355,7 +407,7 @@ Test Empty Asset
 {message && (
 <div
 className={`mt-4 rounded-lg border px-4 py-3 text-sm ${
-message.startsWith("Please")
+isError
 ? "border-red-200 bg-red-50 text-red-700"
 : "border-green-200 bg-green-50 text-green-700"
 }`}
@@ -371,12 +423,13 @@ No saved marketing assets yet.
 </p>
 ) : (
 <div className="grid gap-3 md:grid-cols-2">
-{savedAssets.map((asset, index) => (
+{savedAssets.map((asset) => (
 <div
-key={index}
+key={asset.id}
 className="rounded-lg border bg-slate-50 px-4 py-3"
 >
-{asset}
+<p className="font-semibold">{asset.title}</p>
+<p className="mt-1 text-xs text-slate-500">{asset.type}</p>
 </div>
 ))}
 </div>
