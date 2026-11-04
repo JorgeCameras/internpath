@@ -243,3 +243,62 @@ The Potential Customers value was set to 0 and Calculate Revenue was clicked. Th
 
 Status:
 PASS
+# Module 4 — Marketing Engine + Content System
+
+### Software Test 1 — Save Marketing Asset
+
+Action:
+Save a social media post from the Content Library.
+
+Expected Result:
+The selected marketing asset should be saved successfully and displayed in the Saved Marketing Assets section.
+
+Actual Result:
+The social post "Stop losing track of internship applications" was saved successfully and appeared in the Saved Marketing Assets section.
+
+Status:
+PASS
+
+### Software Test 2 — Supabase Persistence
+
+Action:
+Save a marketing asset, refresh the page, and return to the Saved Marketing Assets section.
+
+Expected Result:
+The saved marketing asset should remain visible after the page refresh because it is stored in Supabase.
+
+Actual Result:
+The saved social post remained visible after refreshing the page, confirming successful Supabase persistence.
+
+Status:
+PASS
+
+### Software Test 3 — Invalid Empty Asset
+
+Action:
+Click the "Test Empty Asset" button without providing a valid marketing asset.
+
+Expected Result:
+The application should remain stable and display a clear validation message.
+
+Actual Result:
+The application remained stable and displayed the validation message "Please select a valid marketing asset." inside a red alert box.
+
+Status:
+PASS
+### Iteration — Saved Asset Feedback Clarity
+
+Issue:
+During testing, the saved asset workflow worked correctly, but the user feedback was not clear enough to immediately distinguish successful saves from invalid actions.
+
+Fix:
+The feedback system was improved by using a green success alert for saved marketing assets and a red validation alert for invalid empty asset actions.
+
+Retest:
+A valid social media asset was saved and the "Test Empty Asset" button was also tested again.
+
+Result:
+The valid save displayed "Marketing asset saved successfully." in a green alert, while the invalid action displayed "Please select a valid marketing asset." in a red alert. The application remained stable in both cases.
+
+Status:
+PASS
