@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 const socialPosts = [
 {
 platform: "Instagram",
@@ -102,7 +106,40 @@ const campaignDays = [
 ["Day 14", "LinkedIn", "Conversion", "Final campaign CTA"],
 ];
 
+const abTests = [
+{
+name: "Homepage Headline",
+versionA: "Organize Your Internship Search in One Place",
+versionB: "Find, Track, and Manage Internships Smarter",
+hypothesis:
+"Version B may communicate more specific benefits because it describes three concrete actions.",
+},
+{
+name: "Marketing CTA",
+versionA: "Start Organizing Your Applications",
+versionB: "Explore InternPath",
+hypothesis:
+"Version A may be clearer because it explains the action the user will take.",
+},
+];
+
 export default function MarketingPage() {
+const [savedAssets, setSavedAssets] = useState<string[]>([]);
+const [message, setMessage] = useState("");
+
+const saveAsset = (asset: string) => {
+if (!asset.trim()) {
+setMessage("Please select a valid marketing asset.");
+return;
+}
+
+if (!savedAssets.includes(asset)) {
+setSavedAssets([...savedAssets, asset]);
+}
+
+setMessage("Marketing asset saved successfully.");
+};
+
 return (
 <main className="min-h-screen bg-slate-50 px-6 py-12 text-slate-900">
 <div className="mx-auto max-w-6xl">
@@ -187,15 +224,21 @@ Ready-to-use social media content for InternPath.
 
 <div className="mt-5 grid gap-4 md:grid-cols-2">
 {socialPosts.map((post, index) => (
-<article
-key={index}
-className="rounded-2xl border bg-white p-5"
->
+<article key={index} className="rounded-2xl border bg-white p-5">
 <span className="text-sm font-semibold text-blue-600">
 {post.platform}
 </span>
+
 <h3 className="mt-2 font-bold">{post.title}</h3>
+
 <p className="mt-2 text-sm text-slate-600">{post.caption}</p>
+
+<button
+onClick={() => saveAsset(post.title)}
+className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+>
+Save Asset
+</button>
 </article>
 ))}
 </div>
@@ -206,10 +249,7 @@ className="rounded-2xl border bg-white p-5"
 
 <div className="mt-5 grid gap-4 md:grid-cols-3">
 {videoScripts.map((script, index) => (
-<article
-key={index}
-className="rounded-2xl border bg-white p-5"
->
+<article key={index} className="rounded-2xl border bg-white p-5">
 <h3 className="font-bold">{script.title}</h3>
 
 <p className="mt-3 text-sm">
@@ -223,6 +263,13 @@ className="rounded-2xl border bg-white p-5"
 <p className="mt-3 text-sm">
 <strong>CTA:</strong> {script.cta}
 </p>
+
+<button
+onClick={() => saveAsset(script.title)}
+className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+>
+Save Asset
+</button>
 </article>
 ))}
 </div>
@@ -254,6 +301,86 @@ className="rounded-2xl border bg-white p-5"
 ))}
 </tbody>
 </table>
+</div>
+</section>
+
+<section className="mt-8">
+<h2 className="text-2xl font-bold">A/B Testing</h2>
+<p className="mt-1 text-slate-600">
+Compare alternative marketing messages before using them.
+</p>
+
+<div className="mt-5 grid gap-4 md:grid-cols-2">
+{abTests.map((test, index) => (
+<article key={index} className="rounded-2xl border bg-white p-6">
+<h3 className="text-lg font-bold">{test.name}</h3>
+
+<div className="mt-4 rounded-lg bg-slate-50 p-4">
+<p className="text-xs font-semibold text-blue-600">VERSION A</p>
+<p className="mt-1">{test.versionA}</p>
+</div>
+
+<div className="mt-3 rounded-lg bg-slate-50 p-4">
+<p className="text-xs font-semibold text-green-600">
+VERSION B
+</p>
+<p className="mt-1">{test.versionB}</p>
+</div>
+
+<p className="mt-4 text-sm text-slate-600">
+<strong>Hypothesis:</strong> {test.hypothesis}
+</p>
+</article>
+))}
+</div>
+</section>
+
+<section className="mt-8 rounded-2xl border bg-white p-6">
+<div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+<div>
+<h2 className="text-2xl font-bold">Saved Marketing Assets</h2>
+<p className="mt-1 text-slate-600">
+Marketing content selected for future use.
+</p>
+</div>
+
+<button
+onClick={() => saveAsset("")}
+className="rounded-lg border px-4 py-2 text-sm font-semibold"
+>
+Test Empty Asset
+</button>
+</div>
+
+{message && (
+<div
+className={`mt-4 rounded-lg border px-4 py-3 text-sm ${
+message.startsWith("Please")
+? "border-red-200 bg-red-50 text-red-700"
+: "border-green-200 bg-green-50 text-green-700"
+}`}
+>
+{message}
+</div>
+)}
+
+<div className="mt-5">
+{savedAssets.length === 0 ? (
+<p className="text-sm text-slate-500">
+No saved marketing assets yet.
+</p>
+) : (
+<div className="grid gap-3 md:grid-cols-2">
+{savedAssets.map((asset, index) => (
+<div
+key={index}
+className="rounded-lg border bg-slate-50 px-4 py-3"
+>
+{asset}
+</div>
+))}
+</div>
+)}
 </div>
 </section>
 </div>
