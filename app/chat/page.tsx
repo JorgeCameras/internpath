@@ -8,8 +8,15 @@ export default function ChatPage() {
 const [stage, setStage] = useState("");
 const [help, setHelp] = useState("");
 const [urgency, setUrgency] = useState("");
+
 const [saveMessage, setSaveMessage] = useState("");
 const [isSaving, setIsSaving] = useState(false);
+const [savedInteractionId, setSavedInteractionId] = useState<string | null>(
+null
+);
+
+const [feedbackMessage, setFeedbackMessage] = useState("");
+const [selectedFeedback, setSelectedFeedback] = useState("");
 
 const completed = [stage, help, urgency].filter(Boolean).length;
 
@@ -54,9 +61,13 @@ async function saveInteraction() {
 if (!recommendation) return;
 
 setSaveMessage("");
+setFeedbackMessage("");
+setSelectedFeedback("");
 setIsSaving(true);
 
-const { error } = await supabase.from("chat_interactions").insert([
+const { data, error } = await supabase
+.from("chat_interactions")
+.insert([
 {
 stage,
 help_type: help,
@@ -64,7 +75,9 @@ urgency,
 recommendation: recommendation.title,
 feedback: null,
 },
-]);
+])
+.select("id")
+.single();
 
 setIsSaving(false);
 
@@ -74,7 +87,33 @@ setSaveMessage("Could not save interaction.");
 return;
 }
 
+setSavedInteractionId(data.id);
 setSaveMessage("Interaction saved successfully.");
+}
+
+async function submitFeedback(value: "Helpful" | "Not helpful") {
+if (!savedInteractionId) {
+setFeedbackMessage("Save the interaction before submitting feedback.");
+return;
+}
+
+setFeedbackMessage("");
+
+const { error } = await supabase
+.from("chat_interactions")
+.update({
+feedback: value,
+})
+.eq("id", savedInteractionId);
+
+if (error) {
+console.error(error);
+setFeedbackMessage("Could not save feedback.");
+return;
+}
+
+setSelectedFeedback(value);
+setFeedbackMessage("Feedback saved successfully.");
 }
 
 return (
@@ -183,6 +222,50 @@ saveMessage.includes("successfully")
 >
 {saveMessage}
 </p>
+)}
+
+{savedInteractionId && (
+<div className="mt-5 border-t border-purple-200 pt-4">
+<p className="text-sm font-semibold text-purple-950">
+Was this recommendation helpful?
+</p>
+
+<div className="mt-3 flex gap-3">
+<button
+onClick={() => submitFeedback("Helpful")}
+className={`rounded-lg border px-4 py-2 text-sm font-medium ${
+selectedFeedback === "Helpful"
+? "border-green-600 bg-green-100 text-green-800"
+: "border-gray-300 bg-white text-gray-700 hover:border-green-500"
+}`}
+>
+👍 Helpful
+</button>
+
+<button
+onClick={() => submitFeedback("Not helpful")}
+className={`rounded-lg border px-4 py-2 text-sm font-medium ${
+selectedFeedback === "Not helpful"
+? "border-red-600 bg-red-100 text-red-800"
+: "border-gray-300 bg-white text-gray-700 hover:border-red-500"
+}`}
+>
+👎 Not helpful
+</button>
+</div>
+
+{feedbackMessage && (
+<p
+className={`mt-3 text-sm font-medium ${
+feedbackMessage.includes("successfully")
+? "text-green-700"
+: "text-red-700"
+}`}
+>
+{feedbackMessage}
+</p>
+)}
+</div>
 )}
 </div>
 )}
