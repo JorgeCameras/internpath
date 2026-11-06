@@ -302,3 +302,109 @@ The valid save displayed "Marketing asset saved successfully." in a green alert,
 
 Status:
 PASS
+# Module 5 — Testing
+
+## Software Test 1 — Guided Intake Flow
+
+Action:
+Complete the three intake questions.
+
+Expected Result:
+The assistant displays a recommendation after the third answer.
+
+Actual Result:
+The user completed all three questions and the assistant displayed a recommendation based on the selected answers.
+
+Status:
+PASS
+
+
+## Software Test 2 — Guardrail and Human Checkpoint
+
+Action:
+Select an urgent situation that requires additional support.
+
+Expected Result:
+The assistant displays a human-support recommendation and the guardrail remains visible.
+
+Actual Result:
+The assistant displayed “Human support recommended” for an urgent situation and the guardrail remained visible without causing an application error.
+
+Status:
+PASS
+
+
+## Software Test 3 — Storage and Feedback
+
+Action:
+Complete the guided flow, save the interaction, and submit feedback.
+
+Expected Result:
+The interaction and feedback are saved successfully.
+
+Actual Result:
+The application displayed “Interaction saved successfully.” and “Feedback saved successfully.” after submitting a Helpful rating.
+
+Status:
+PASS
+## External User Test 1
+
+User:
+External Tester 1
+
+Task:
+Complete the three-question guided flow, review the recommendation, save the interaction, and submit feedback.
+
+What worked:
+The user said the three-question flow was easy to understand and liked that the questions appeared progressively instead of all at once.
+
+What was confusing:
+The user did not immediately understand that the interaction had to be saved before the Helpful or Not helpful feedback buttons appeared.
+
+Feedback:
+The user suggested making the save step clearer and explaining that feedback becomes available after saving the interaction.
+
+Change considered or implemented:
+Add a clearer message near the Save interaction button explaining that the user must save the interaction before submitting feedback.
+
+
+## External User Test 2
+
+User:
+External Tester 2
+
+Task:
+Complete the guided assistant using a different internship-search scenario and review the recommendation.
+
+What worked:
+The user said the recommendation matched the selected scenario and the progress indicator made it clear how many questions remained.
+
+What was confusing:
+The user said the Guardrail section looked slightly disconnected from the recommendation because it appeared as a separate block at the bottom.
+
+Feedback:
+The user suggested giving the Guardrail section a clearer label explaining that it represents the limits of the assistant.
+
+Change considered or implemented:
+Keep the guardrail visible but improve its explanatory text so users understand why the section is included.
+
+
+## External User Test 3
+
+User:
+External Tester 3
+
+Task:
+Complete the guided assistant, test the recommendation, save the interaction, and use the Helpful or Not helpful rating.
+
+What worked:
+The user successfully completed all three questions, saved the interaction, and submitted a Helpful rating without application errors.
+
+What was confusing:
+The user said it would be useful to have a button to restart the guided assistant after finishing one scenario.
+
+Feedback:
+The user suggested adding a “Start new interaction” button so another scenario can be tested without manually refreshing the page.
+
+Change considered or implemented:
+Consider adding a reset button that clears the three answers, recommendation, save message, and feedback so the user can start a new guided interaction.

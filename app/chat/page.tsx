@@ -116,6 +116,16 @@ setSelectedFeedback(value);
 setFeedbackMessage("Feedback saved successfully.");
 }
 
+function resetInteraction() {
+setStage("");
+setHelp("");
+setUrgency("");
+setSaveMessage("");
+setSavedInteractionId(null);
+setFeedbackMessage("");
+setSelectedFeedback("");
+}
+
 return (
 <>
 <Navbar />
@@ -267,6 +277,13 @@ feedbackMessage.includes("successfully")
 )}
 </div>
 )}
+
+<button
+onClick={resetInteraction}
+className="mt-4 rounded-lg border border-purple-600 px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50"
+>
+Start new interaction
+</button>
 </div>
 )}
 
