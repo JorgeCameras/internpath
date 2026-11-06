@@ -145,3 +145,80 @@ Use the primary CTA:
 Preserve the existing InternPath navigation and blue-and-white visual identity.
 
 The homepage should feel more polished and communicate the product's value immediately.
+# Module 5 — Coding Prompt Log
+
+## Prompt 1 — Chat Page Scaffold
+
+Create a public `/chat` page for the existing InternPath application.
+
+Requirements:
+- Use the existing Next.js, React, TypeScript, and Tailwind CSS project.
+- Preserve the existing InternPath navigation and visual style.
+- Add the title “InternPath Guided Assistant”.
+- Add a short introduction.
+- Add a placeholder for the guided intake flow.
+- Add a progress card showing 0 of 3 questions completed.
+- Do not add recommendation logic yet.
+
+## Prompt 2 — Guided Intake Flow
+
+Upgrade the `/chat` page with exactly three intake questions.
+
+Questions:
+1. Current internship-search stage.
+2. Type of help needed.
+3. Level of urgency.
+
+Requirements:
+- Use selectable buttons.
+- Show questions progressively.
+- Track completed questions.
+- Update the progress indicator from 0 of 3 to 3 of 3.
+- Show an intake-complete state after all three answers are selected.
+
+## Prompt 3 — Recommendation Logic and Guardrails
+
+Add recommendation logic to the InternPath Guided Assistant.
+
+Requirements:
+- Generate a recommended next action based on the selected answers.
+- Add a visible guardrail explaining the limits of the assistant.
+- Add a human-support checkpoint for urgent situations.
+- Recommend contacting an appropriate human when personalized guidance is needed.
+- Keep the interaction rule-based and do not use paid AI APIs.
+
+## Prompt 4 — Supabase Interaction Persistence
+
+Connect the `/chat` page to the existing Supabase project.
+
+Requirements:
+- Use the `chat_interactions` table.
+- Save stage, help type, urgency, recommendation, feedback, and creation timestamp.
+- Show a visible success message after saving.
+- Show an error message if the save fails.
+- Keep Row Level Security enabled.
+
+## Prompt 5 — Feedback Rating
+
+Add feedback controls to the saved guided-assistant interaction.
+
+Requirements:
+- Add Helpful and Not helpful buttons.
+- Update the saved Supabase record with the selected feedback.
+- Show a visible confirmation message after feedback is saved.
+- Do not allow feedback before the interaction has been saved.
+
+## Prompt 6 — User Testing Iteration
+
+Improve the guided assistant based on external user testing.
+
+User feedback:
+The user wanted an easier way to begin another guided scenario after completing the first interaction.
+
+Requirements:
+- Add a “Start new interaction” button.
+- Clear all three intake answers.
+- Clear the recommendation state.
+- Clear saved interaction information.
+- Clear feedback messages and selected feedback.
+- Return progress to 0 of 3 questions completed.
