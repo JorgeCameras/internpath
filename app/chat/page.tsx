@@ -10,6 +10,55 @@ const [urgency, setUrgency] = useState("");
 
 const completed = [stage, help, urgency].filter(Boolean).length;
 
+function getRecommendation() {
+if (!stage || !help || !urgency) return null;
+
+if (help === "Preparing for an interview") {
+return {
+title: "Prepare for your interview",
+text: "Review the company, prepare examples of your experience, and practice common interview questions. Use InternPath to keep your interview information organized.",
+human: false,
+};
+}
+
+if (help === "Preparing an application") {
+return {
+title: "Prepare a strong application",
+text: "Review the internship requirements, update your resume, and make sure your application clearly matches the role before submitting it.",
+human: false,
+};
+}
+
+if (help === "Organizing applications") {
+return {
+title: "Organize your applications",
+text: "Use InternPath to track each application, its current status, deadlines, and next actions so you do not lose important opportunities.",
+human: false,
+};
+}
+
+if (help === "Finding internships") {
+return {
+title: "Start exploring opportunities",
+text: "Use the Research and Applications sections of InternPath to identify internships that match your interests and organize the opportunities you want to pursue.",
+human: false,
+};
+}
+
+return {
+title: "Talk to a human advisor",
+text: "This situation may require personalized guidance. Consider contacting a university career advisor, professor, recruiter, or another appropriate professional.",
+human: true,
+};
+}
+
+const recommendation = getRecommendation();
+
+const showHumanCheckpoint =
+urgency === "Within 48 hours" &&
+(help === "Preparing an application" ||
+help === "Preparing for an interview");
+
 return (
 <>
 <Navbar />
@@ -84,18 +133,46 @@ onSelect={setUrgency}
 />
 )}
 
-{completed === 3 && (
+{recommendation && (
 <div className="rounded-xl border border-purple-200 bg-purple-50 p-5">
-<p className="font-semibold text-purple-900">
-Intake complete
+<p className="text-sm font-semibold text-purple-600">
+Your recommendation
 </p>
 
-<p className="mt-2 text-sm text-purple-800">
-Your answers are ready. The next development step will add
-recommendation logic.
+<h2 className="mt-2 text-lg font-bold text-purple-950">
+{recommendation.title}
+</h2>
+
+<p className="mt-2 text-sm text-purple-900">
+{recommendation.text}
 </p>
 </div>
 )}
+
+{showHumanCheckpoint && (
+<div className="rounded-xl border border-amber-300 bg-amber-50 p-5">
+<p className="font-semibold text-amber-900">
+Human support recommended
+</p>
+
+<p className="mt-2 text-sm text-amber-800">
+Because your situation is urgent, consider contacting a
+university career advisor, professor, recruiter, or another
+appropriate person for personalized support.
+</p>
+</div>
+)}
+
+<div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+<p className="font-semibold text-gray-900">Guardrail</p>
+
+<p className="mt-2 text-sm text-gray-600">
+InternPath provides general internship-search guidance only.
+It cannot provide legal, medical, financial, or emergency
+advice. For those situations, contact an appropriate
+qualified professional.
+</p>
+</div>
 </section>
 
 <aside className="space-y-6">
@@ -123,6 +200,17 @@ className="h-full bg-purple-600 transition-all"
 style={{ width: `${(completed / 3) * 100}%` }}
 />
 </div>
+</div>
+
+<div className="rounded-2xl border bg-white p-5 shadow-sm">
+<h2 className="font-semibold text-gray-900">
+Human checkpoint
+</h2>
+
+<p className="mt-2 text-sm text-gray-600">
+If your situation requires personalized, professional, or
+university-specific guidance, talk to a qualified person.
+</p>
 </div>
 </aside>
 </div>
@@ -171,3 +259,4 @@ selected === option
 </div>
 );
 }
+
