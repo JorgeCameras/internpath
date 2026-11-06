@@ -408,3 +408,21 @@ The user suggested adding a “Start new interaction” button so another scenar
 
 Change considered or implemented:
 Consider adding a reset button that clears the three answers, recommendation, save message, and feedback so the user can start a new guided interaction.
+## Module 5 — Iteration Log
+
+### Iteration — Start New Interaction
+
+Issue:
+During external testing, a tester noted that after completing one guided scenario there was no clear way to begin another interaction without manually refreshing the page.
+
+Fix:
+A “Start new interaction” button was added to the recommendation section. The button clears the three intake answers, recommendation state, saved interaction information, feedback message, and selected rating.
+
+Retest:
+The guided flow was completed again, the interaction was saved, feedback was submitted, and the “Start new interaction” button was selected.
+
+Result:
+The assistant successfully returned to the initial state with 0 of 3 questions completed. The user can now begin another scenario without refreshing the browser.
+
+Status:
+PASS
