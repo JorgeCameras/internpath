@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import { supabase } from "@/app/core/lib/supabase";
 
 export default function ChatPage() {
 const [stage, setStage] = useState("");
 const [help, setHelp] = useState("");
 const [urgency, setUrgency] = useState("");
+const [saveMessage, setSaveMessage] = useState("");
+const [isSaving, setIsSaving] = useState(false);
 
 const completed = [stage, help, urgency].filter(Boolean).length;
 
@@ -17,7 +20,6 @@ if (help === "Preparing for an interview") {
 return {
 title: "Prepare for your interview",
 text: "Review the company, prepare examples of your experience, and practice common interview questions. Use InternPath to keep your interview information organized.",
-human: false,
 };
 }
 
@@ -25,7 +27,6 @@ if (help === "Preparing an application") {
 return {
 title: "Prepare a strong application",
 text: "Review the internship requirements, update your resume, and make sure your application clearly matches the role before submitting it.",
-human: false,
 };
 }
 
@@ -33,22 +34,12 @@ if (help === "Organizing applications") {
 return {
 title: "Organize your applications",
 text: "Use InternPath to track each application, its current status, deadlines, and next actions so you do not lose important opportunities.",
-human: false,
 };
 }
 
-if (help === "Finding internships") {
 return {
 title: "Start exploring opportunities",
 text: "Use the Research and Applications sections of InternPath to identify internships that match your interests and organize the opportunities you want to pursue.",
-human: false,
-};
-}
-
-return {
-title: "Talk to a human advisor",
-text: "This situation may require personalized guidance. Consider contacting a university career advisor, professor, recruiter, or another appropriate professional.",
-human: true,
 };
 }
 
@@ -58,6 +49,33 @@ const showHumanCheckpoint =
 urgency === "Within 48 hours" &&
 (help === "Preparing an application" ||
 help === "Preparing for an interview");
+
+async function saveInteraction() {
+if (!recommendation) return;
+
+setSaveMessage("");
+setIsSaving(true);
+
+const { error } = await supabase.from("chat_interactions").insert([
+{
+stage,
+help_type: help,
+urgency,
+recommendation: recommendation.title,
+feedback: null,
+},
+]);
+
+setIsSaving(false);
+
+if (error) {
+console.error(error);
+setSaveMessage("Could not save interaction.");
+return;
+}
+
+setSaveMessage("Interaction saved successfully.");
+}
 
 return (
 <>
@@ -146,6 +164,26 @@ Your recommendation
 <p className="mt-2 text-sm text-purple-900">
 {recommendation.text}
 </p>
+
+<button
+onClick={saveInteraction}
+disabled={isSaving}
+className="mt-4 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-60"
+>
+{isSaving ? "Saving..." : "Save interaction"}
+</button>
+
+{saveMessage && (
+<p
+className={`mt-3 text-sm font-medium ${
+saveMessage.includes("successfully")
+? "text-green-700"
+: "text-red-700"
+}`}
+>
+{saveMessage}
+</p>
+)}
 </div>
 )}
 
@@ -259,4 +297,3 @@ selected === option
 </div>
 );
 }
-
