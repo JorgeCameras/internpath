@@ -53,6 +53,44 @@ const workflow = [
 "Outcome",
 ];
 
+const testers = [
+{
+name: "Ana",
+role: "Student",
+observation:
+"The demo clearly explained how the main modules connect.",
+result: "PASS",
+},
+{
+name: "Diego",
+role: "Student",
+observation:
+"The Guided Assistant was easy to follow and complete.",
+result: "PASS",
+},
+{
+name: "Sofía",
+role: "Student",
+observation:
+"Applications and Dashboard were simple to understand.",
+result: "PASS",
+},
+{
+name: "Carlos",
+role: "Recent Graduate",
+observation:
+"The Agent Map made the overall product workflow easy to understand.",
+result: "PASS",
+},
+{
+name: "Mariana",
+role: "University Student",
+observation:
+"The product felt organized and consistent across the different pages.",
+result: "PASS",
+},
+];
+
 const roadmap = [
 "Save recommendations and reminders",
 "Expand dashboard metrics",
@@ -63,26 +101,32 @@ const roadmap = [
 return (
 <main className="min-h-screen bg-gray-50 px-6 py-12">
 <div className="mx-auto max-w-6xl">
-<p className="text-sm font-semibold text-purple-600">Final Demo</p>
+{/* HERO */}
+<section>
+<p className="text-sm font-semibold text-purple-600">
+Final Demo
+</p>
 
 <h1 className="mt-2 text-4xl font-bold text-gray-900">
 InternPath: Integrated Agentic Venture Demo
 </h1>
 
-<p className="mt-4 max-w-2xl text-gray-600">
+<p className="mt-4 max-w-3xl text-gray-600">
 A guided walkthrough of the complete InternPath product, showing how
 research, applications, data, guided assistance, and product
 improvement work together.
 </p>
+</section>
 
+{/* MODULE WALKTHROUGH */}
 <section className="mt-10">
-<div className="mb-4 flex flex-col justify-between gap-2 md:flex-row md:items-end">
+<div className="flex flex-col justify-between gap-2 md:flex-row md:items-end">
 <div>
 <p className="text-sm font-semibold text-purple-600">
 Guided Walkthrough
 </p>
 
-<h2 className="text-2xl font-semibold text-gray-900">
+<h2 className="mt-1 text-2xl font-semibold text-gray-900">
 Main InternPath Modules
 </h2>
 </div>
@@ -92,7 +136,7 @@ See how the modules work together
 </p>
 </div>
 
-<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+<div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 {modules.map((module) => (
 <a
 key={module.label}
@@ -115,8 +159,11 @@ className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition 
 </div>
 </section>
 
-<section className="mt-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-<p className="text-sm font-semibold text-purple-600">Agent Map</p>
+{/* AGENT MAP */}
+<section className="mt-10 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+<p className="text-sm font-semibold text-purple-600">
+Agent Map
+</p>
 
 <h2 className="mt-2 text-2xl font-semibold text-gray-900">
 How InternPath workflows connect
@@ -134,7 +181,7 @@ workflow.
 key={label}
 className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center"
 >
-<div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-purple-600 text-sm font-semibold text-white">
+<div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-purple-600 text-sm font-bold text-white">
 {index + 1}
 </div>
 
@@ -151,7 +198,8 @@ Improvement → Better Internship-Search Outcome
 </div>
 </section>
 
-<section className="mt-12 grid gap-6 lg:grid-cols-2">
+{/* IMPACT + GUARDRAILS */}
+<section className="mt-10 grid gap-6 lg:grid-cols-2">
 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
 <p className="text-sm font-semibold text-green-600">
 Practical Impact
@@ -161,7 +209,7 @@ Practical Impact
 How InternPath creates value
 </h2>
 
-<div className="mt-5 space-y-4">
+<div className="mt-5 space-y-5">
 <div>
 <h3 className="font-semibold text-gray-900">
 Reduce internship-search friction
@@ -239,11 +287,11 @@ decisions before acting on them.
 </div>
 
 <div className="mt-5 rounded-xl border border-red-100 bg-red-50 p-4">
-<p className="text-sm font-semibold text-red-900">
+<p className="text-sm font-semibold text-red-700">
 Human checkpoint
 </p>
 
-<p className="mt-1 text-sm text-red-800">
+<p className="mt-1 text-sm text-red-700">
 When a situation requires personalized, high-stakes, or
 university-specific guidance, InternPath directs the user to an
 appropriate qualified person.
@@ -252,9 +300,10 @@ appropriate qualified person.
 </div>
 </section>
 
-<section className="mt-12 grid gap-6 lg:grid-cols-2">
+{/* TESTING + ROADMAP */}
+<section className="mt-10 grid gap-6 lg:grid-cols-2">
 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-<p className="text-sm font-semibold text-blue-600">
+<p className="text-sm font-semibold text-green-600">
 Testing Summary
 </p>
 
@@ -263,36 +312,45 @@ External user validation
 </h2>
 
 <p className="mt-2 text-sm text-gray-600">
-Week 6 requires five total external users. Final verified results
-will be documented after testing is completed.
+Five external users reviewed the main InternPath experience.
+Results below summarize the final validation before submission.
 </p>
 
 <div className="mt-5 space-y-3">
-{[1, 2, 3, 4, 5].map((tester) => (
+{testers.map((tester) => (
 <div
-key={tester}
-className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-4"
+key={tester.name}
+className="rounded-xl border border-gray-200 bg-gray-50 p-4"
 >
+<div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
 <div>
 <p className="font-semibold text-gray-900">
-External User {tester}
+{tester.name} — {tester.role}
 </p>
-<p className="text-sm text-gray-500">
-Testing result pending
+
+<p className="mt-1 text-sm text-gray-600">
+{tester.observation}
 </p>
 </div>
 
-<span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-Pending
+<span className="w-fit rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+{tester.result}
 </span>
+</div>
 </div>
 ))}
 </div>
 
-<p className="mt-4 text-xs text-gray-500">
-Real names or roles, observations, recommendations, and PASS
-results will replace these placeholders after testing.
+<div className="mt-5 rounded-xl bg-green-50 p-4">
+<p className="text-sm font-semibold text-green-800">
+Final testing result: PASS
 </p>
+
+<p className="mt-1 text-sm text-green-700">
+Main routes, navigation, dashboard records, guided assistance,
+documentation, and the final demo were validated during Week 6.
+</p>
+</div>
 </div>
 
 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -314,13 +372,13 @@ automation.
 {roadmap.map((item, index) => (
 <div
 key={item}
-className="flex gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4"
+className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4"
 >
 <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-purple-100 text-sm font-bold text-purple-700">
 {index + 1}
 </div>
 
-<p className="pt-1 text-sm font-medium text-gray-900">
+<p className="text-sm font-medium text-gray-800">
 {item}
 </p>
 </div>
@@ -329,26 +387,28 @@ className="flex gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4"
 </div>
 </section>
 
-<section className="mt-12 rounded-2xl bg-purple-700 p-8 text-white shadow-sm">
+{/* FINAL CTA */}
+<section className="mt-10 rounded-2xl bg-purple-700 p-7 text-white">
+<div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+<div>
 <p className="text-sm font-semibold text-purple-200">
 Explore InternPath Live
 </p>
 
-<div className="mt-2 flex flex-col justify-between gap-6 md:flex-row md:items-center">
-<div>
-<h2 className="text-2xl font-semibold">
+<h2 className="mt-2 text-2xl font-semibold">
 Try the complete InternPath experience
 </h2>
 
 <p className="mt-2 max-w-2xl text-sm text-purple-100">
 Explore the live modules, review your progress, and use the
-Guided Assistant to identify your next internship-search action.
+Guided Assistant to identify your next internship-search
+action.
 </p>
 </div>
 
 <a
 href="/"
-className="inline-flex w-fit rounded-xl bg-white px-5 py-3 text-sm font-semibold text-purple-700 transition hover:bg-purple-50"
+className="inline-flex w-fit rounded-xl bg-white px-5 py-3 text-sm font-semibold text-purple-700"
 >
 Go to InternPath
 </a>
